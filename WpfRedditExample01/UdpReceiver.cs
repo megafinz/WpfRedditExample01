@@ -19,21 +19,31 @@ internal sealed class UdpReceiver
     {
         while (!ct.IsCancellationRequested)
         {
-            // Simulate async UDP interaction.
-            await Task.Delay(2000, ct);
-
             // Construct message, parse it, decide what to do with the result.
-            var message = new NewDeviceMessage("Fancy Device");
+            var message = await SimulateDeviceConnected(ct);
             var result = _messageParser.ParseMessage(message);
 
             switch (result)
             {
-                case NewDeviceAddedResult ndar:
-                    _deviceStorage.Add(ndar.NewDevice);
+                case DeviceConnectedResult dcr:
+                    _deviceStorage.AddOrUpdate(dcr.Device);
                     break;
 
                 // TODO: other results.
             }
         }
+    }
+
+    private static async Task<DeviceConnectedMessage> SimulateDeviceConnected(CancellationToken ct)
+    {
+        await Task.Delay(1000, ct);
+
+        var deviceIdsAndNames = new[] { (1, "Fancy Device"), (2, "Cool Device"), (3, "Evil Device") };
+        var deviceStates = new[] { DeviceState.Idle, DeviceState.Running, DeviceState.Error };
+
+        var (id, name) = deviceIdsAndNames[Random.Shared.Next(deviceIdsAndNames.Length)];
+        var state = deviceStates[Random.Shared.Next(deviceStates.Length)];
+
+        return new DeviceConnectedMessage(id, name, state);
     }
 }

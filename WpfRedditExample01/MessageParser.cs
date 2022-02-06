@@ -2,19 +2,9 @@
 
 namespace WpfRedditExample01;
 
-internal abstract class MessageParsingResult
-{
-}
+internal abstract record MessageParsingResult;
 
-internal sealed class NewDeviceAddedResult : MessageParsingResult
-{
-    public NewDeviceAddedResult(Device newDevice)
-    {
-        NewDevice = newDevice;
-    }
-
-    public Device NewDevice { get; }
-}
+internal sealed record DeviceConnectedResult(Device Device) : MessageParsingResult;
 
 internal sealed class MessageParser
 {
@@ -22,9 +12,9 @@ internal sealed class MessageParser
     {
         switch (message)
         {
-            case NewDeviceMessage ndm:
-                var newDevice = new Device(ndm.NewDeviceName);
-                return new NewDeviceAddedResult(newDevice);
+            case DeviceConnectedMessage(var id, var name, var state):
+                var device = new Device(id, name, state);
+                return new DeviceConnectedResult(device);
 
             // TODO: handle other messages.
         }

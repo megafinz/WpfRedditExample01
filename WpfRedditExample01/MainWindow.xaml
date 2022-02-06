@@ -8,12 +8,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" x:ClassModifier="internal">
     <Grid>
-        <ListView ItemsSource="{Binding Devices, Mode=OneTime}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name, Mode=OneTime}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <DataGrid ItemsSource="{Binding Devices, Mode=OneTime}" />
     </Grid>
 </Window>

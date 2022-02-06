@@ -1,15 +1,5 @@
 ﻿namespace WpfRedditExample01;
 
-internal abstract class Message
-{
-}
+internal abstract record Message;
 
-internal sealed class NewDeviceMessage : Message
-{
-    public NewDeviceMessage(string newDeviceName)
-    {
-        NewDeviceName = newDeviceName;
-    }
-
-    public string NewDeviceName { get; }
-}
+internal sealed record DeviceConnectedMessage(int Id, string Name, DeviceState State) : Message;
